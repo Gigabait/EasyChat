@@ -116,7 +116,7 @@ if CLIENT then
 	local EC_TEAMS_COLOR 	= CreateConVar("easychat_teams_colored","0",FCVAR_ARCHIVE,"Display team with its relative color")
 	local EC_PLAYER_COLOR 	= CreateConVar("easychat_players_colored","1",FCVAR_ARCHIVE,"Display player with its relative team color")
 	local EC_ENABLE 		= CreateConVar("easychat_enable","1",{FCVAR_ARCHIVE,FCVAR_USERINFO},"Use easychat or not")
-	local EC_ENABLEBROWSER	= CreateConVar("easychat_enablebrowser","0",{FCVAR_ARCHIVE,FCVAR_USERINFO},"Use easychat browser or not")
+	local EC_ENABLEBROWSER	= CreateConVar("easychat_enablebrowser","1",{FCVAR_ARCHIVE,FCVAR_USERINFO},"Use easychat browser or not")
 	local EC_DERMASKIN 		= CreateConVar("easychat_use_dermaskin","0",{FCVAR_ARCHIVE,FCVAR_USERINFO},"Use dermaskin look or not")
 	local EC_LOCAL_MSG_DIST = CreateConVar("easychat_local_msg_distance","300",FCVAR_ARCHIVE,"Set the maximum distance for users to receive local messages")
 	local EC_NO_MODULES 	= CreateConVar("easychat_no_modules","0",FCVAR_ARCHIVE,"Should easychat load modules or not")
@@ -662,13 +662,15 @@ if CLIENT then
 				textentry:AddHistory(textentry:GetText())
 				textentry.HistoryPos = 0
 			end
+			if key == KEY_ESCAPE then
+				textentry.HistoryPos = 0
+			end
+
 			if not textentry.HistoryPos then return end
 			if key == KEY_UP then
-				textentry:AddHistory(textentry:GetText())
 				textentry.HistoryPos = textentry.HistoryPos - 1
 				textentry:UpdateFromHistory()
 			elseif key == KEY_DOWN then
-				textentry:AddHistory(textentry:GetText())
 				textentry.HistoryPos = textentry.HistoryPos + 1
 				textentry:UpdateFromHistory()
 			end
@@ -681,6 +683,7 @@ if CLIENT then
 
 			if code == KEY_ESCAPE then
 				ECClose()
+				gui.HideGameUI()
 			elseif code == KEY_ENTER or code == KEY_PAD_ENTER then
 				self:SetText(string.Replace(self:GetText(),"╚​",""))
 				if string.Trim(self:GetText()) ~= "" then
